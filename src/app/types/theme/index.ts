@@ -1,4 +1,5 @@
 import { AvatarProps } from "antd";
+import { MenuProps } from "rc-menu";
 
 export interface Theme {
   colors: any;
@@ -28,12 +29,6 @@ export interface CustomAntTokenTheme {
   };
 }
 
-// i re-used the one  from ant ButtonType
-// export const AntButtonTypes = ["default", "primary", "dashed", "link", "text"];
-// export const ButtonTypes = [...AntButtonTypes] as const;
-// const ExtendedButtonTypes = [...ButtonTypes, "custom", "special"] as const;
-// export type ExtendedButtonType = (typeof ExtendedButtonTypes)[number];
-
 export enum AntButtonTypesEnum {
   "default",
   "primary",
@@ -55,3 +50,10 @@ export const ExtendedButtonTypes = {
 export interface avatarprops extends AvatarProps {
   children?: React.ReactNode;
 }
+
+export interface MenuItemProps {
+  label: string;
+  count: number;
+}
+export type MenuItem = Required<MenuProps>["items"][number];
+

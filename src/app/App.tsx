@@ -17,6 +17,7 @@ import { store } from "./store/store";
 import Dashboard from "./pages/dashboard";
 import { ConfigProvider } from "antd";
 import { useStyle } from "./hooks/theme/useStyle";
+import Claims from "./pages/claims";
 
 function App() {
   const { styles } = useStyle();
@@ -34,9 +35,15 @@ function App() {
           index: true,
           element: <Navigate to="/dashboard" replace />,
         },
+
         {
           path: "/dashboard",
           element: <Dashboard />,
+        },
+
+        {
+          path: "/claims",
+          element: <Claims />,
         },
         {
           path: "/lola",
