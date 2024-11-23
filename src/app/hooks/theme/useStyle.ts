@@ -66,7 +66,7 @@ export const useStyle = createStyles(({ prefixCls, css }) => ({
     } */
   `,
   menu: css`
-    &.ant-menu-light {
+    &.${prefixCls}-menu-light {
       background: transparent;
     }
     .${prefixCls}-menu-item {
@@ -85,7 +85,7 @@ export const useStyle = createStyles(({ prefixCls, css }) => ({
       color: ${theme.colors.monoChrome.regular};
     }
 
-    &.${prefixCls}-menu-light:not(.ant-menu-horizontal)
+    &.${prefixCls}-menu-light:not(.${prefixCls}-menu-horizontal)
       .${prefixCls}-menu-submenu-title:hover {
       background-color: ${theme.colors.primary.aliceblue};
     }
@@ -103,14 +103,20 @@ export const useStyle = createStyles(({ prefixCls, css }) => ({
       background: transparent;
     }
 
-    &.ant-menu {
-      .ant-menu-item {
+
+
+    &.${prefixCls}-menu {
+      .${prefixCls}-menu-item {
         border-radius: 6px;
       }
-      .ant-menu-submenu {
-        .ant-menu-sub {
+      .${prefixCls}-badge-count{
+        background-color: transparent;
+        color: ${theme.colors.monoChrome.regular};
+      }
+      .${prefixCls}-menu-submenu {
+        .${prefixCls}-menu-sub {
           background-color: transparent;
-          .ant-menu-item {
+          .${prefixCls}-menu-item {
             position: relative;
             padding: 0.75rem 1.125rem !important;
             /* background-color: yellow; */
@@ -131,10 +137,15 @@ export const useStyle = createStyles(({ prefixCls, css }) => ({
               opacity: 1;
             }
           }
-          .ant-menu-item-selected {
+          .${prefixCls}-menu-item-selected {
             border-color: ${theme.colors.primary.regular};
             &::after {
               background-color: ${theme.colors.primary.regular};
+            }
+            .${prefixCls}-badge-count{
+               background: ${theme.colors.primary.regular}0D;
+               color: ${theme.colors.primary.regular};
+               box-shadow: 0 0 0 1px ${theme.colors.primary.lightcyan};
             }
           }
         }

@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import { CustomLayout, CustomMenuItem } from "./style";
 import { LogoCdm } from "@/assets/images";
-import { Dropdown, Input, Menu, MenuProps } from "antd";
+import { Badge, Dropdown, Input, Menu, MenuProps } from "antd";
 import {
   DesktopOutlined,
   PieChartOutlined,
@@ -25,7 +25,9 @@ function Layout() {
   const MenuItem: React.FC<MenuItemProps> = ({ label, count }) => (
     <CustomMenuItem>
       <p>{label}</p>
-      <div className="count">{count}</div>
+      <Badge count={ count} />
+
+      {/* <div className="count">{count}</div> */}
     </CustomMenuItem>
   );
   function getItem(

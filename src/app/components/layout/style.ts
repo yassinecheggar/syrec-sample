@@ -47,5 +47,8 @@ export const CustomLayout = styled(Layout)`
 export const CustomMenuItem = styled.div`
   ${centerContent}
   justify-content: space-between;
-  width: auto;
+  width: 100%;
+  .count{
+
+  }
 `;
