@@ -1,12 +1,14 @@
 import { AliasToken } from "antd/es/theme/internal";
-import { css} from "styled-components";
-import { DefaultTheme } from "styled-components";
 import { Theme } from "@/types/theme";
-import type { CSSProp } from 'styled-components'
-
+import { OverrideToken } from "antd/es/theme/interface";
+import { css, Interpolation } from "styled-components";
+import { Styles } from "styled-components/dist/types";
 
 const baseColor = {
-  white: "#ffffff",
+  white: {
+    white: "#ffffff",
+    ghostWhite: "#FAFCFE ",
+  },
   black: "#000000",
   gray: {
     100: "#f2f2f2",
@@ -16,12 +18,16 @@ const baseColor = {
     regular: "#222328",
   },
   body: {
-    bold_gray: "#767874", // heading color
+    bold_gray: "#767874",
+    // heading color
   },
   transparent: "transparent",
   primary: {
     regular: "#0071CE",
-    greendisabled: "#b0ca33",
+    aliceblue: "#F4FAFF ",
+    brightblue: "#0F93FF",
+    lightcyan: "#E9F5FF",
+    lightsteelblue: "#D7E8F5",
   },
   secondary: {
     regular: "#E7004C ",
@@ -35,7 +41,7 @@ const baseColor = {
 
   monoChrome: {
     light: "#6E7191", //descrption 700
-    regular: "#4E4B66", //text 800
+    regular: "#4E4B66",
 
     400: "#494BE9",
     blue: {
@@ -53,10 +59,11 @@ const baseColor = {
     line: "#D9DBE9",
   },
 };
+
 export const breakpoints = {
-  small: '600px',
-  medium: '768px',
-  large: '1024px',
+  small: "600px",
+  medium: "768px",
+  large: "1024px",
 };
 
 export const theme = {
@@ -103,36 +110,21 @@ export const theme = {
     "2xl": "8rem",
     "3xl": "16rem",
   },
-  breakpoints:{
+  breakpoints: {
     ...breakpoints,
-  }
+  },
 };
-
-
 
 export const antToken = (props: Theme): Partial<AliasToken> => ({
   colorPrimary: props.colors.primary.regular,
   fontFamily: "poppins",
-  fontSize: 12,
+  // fontSize: 12,
 });
-
-// export const respondTo :RuleSet<object> = {
-//   small: (styles: Styles<object>, ...interpolations: Interpolation<object>[]) => css`
-//     @media (max-width: ${breakpoints.small}) {
-//       ${css(...interpolations)}
-//     }
-//   `,
-//   medium: (...args) => css`
-//     @media (max-width: ${breakpoints.medium}) {
-//       ${css(...args)}
-//     }
-//   `,
-//   large: (...args) => css`
-//     @media (max-width: ${breakpoints.large}) {
-//       ${css(...args)}
-//     }
-//   `,
-// };
+export const antComponent = (props: Theme): OverrideToken => ({
+  Button: {
+    colorPrimaryBg: "red",
+  },
+});
 
 interface Breakpoints {
   small: string;
@@ -140,24 +132,33 @@ interface Breakpoints {
   large: string;
 }
 
+export function respondTo(prop: keyof Breakpoints) {
+  return function (
+    styles: Styles<object>,
+    ...interpolations: Interpolation<object>[]
+  ): ReturnType<typeof css> {
+    return css`
+      @media (max-width: ${({ theme }) => theme.breakpoints[prop]}) {
+        ${css(styles, ...interpolations)}
+      }
+    `;
+  };
+}
 
+// type CSSHelper = typeof css;
 
-// export const respondTo = <String extends keyof Breakpoints>(
-//   breakpoint: String
-// ) => (styles: CSSProp) => css`
-//   @media (max-width: ${(props) => props.theme.breakpoints[breakpoint]}) {
-//     ${styles}
-//   }
-// `;
-
-export const respondTo = <String extends keyof Breakpoints>(breakpoint: String) => (styles: CSSProp) => css`
-  @media (max-width: ${(props) => props.theme.breakpoints[breakpoint]}) {
-    ${styles}
-  }
-`;
-
-// export const antComponent = (props: Theme): ComponentTokenMap => ({
-//     Input:{
-//         inputFontSize:'12',
+// export const respondTo = (prop: keyof Breakpoints): CSSHelper => {
+//   return ((strings: CSSObject, ...args: Interpolation<object>[]) => css`
+//     @media (max-width: ${({ theme }) => theme.breakpoints[prop]}) {
+//       ${strings}
 //     }
-// });
+//   `) as CSSHelper;
+// };
+export const doWork = (prop: keyof Breakpoints) => {
+  // Return a function that uses css tagged template literal
+  return (strings: TemplateStringsArray, ...args: any[]) => css`
+    @media (max-width: ${({ theme }) => theme.breakpoints[prop]}) {
+      ${css(strings, ...args)}
+    }
+  `;
+};

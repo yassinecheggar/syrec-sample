@@ -1,28 +1,33 @@
 import {
   createBrowserRouter,
-  Link,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Layout from "./components/layout";
-import { getdetails, logout } from "./apis";
+import { getdetails, logout } from "./services/apis/auth";
 import { AuthProvider } from "./components/auth/AuthProvider";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./assets/theme/GlobalStyle";
 import { StyleProvider } from "@ant-design/cssinjs";
-import { theme } from "./assets/theme/theme";
-import { Button } from "antd";
-import { redirectToKeycloak } from "./utils/helpers";
+import { antComponent, antToken, theme } from "./assets/theme/theme";
+import { Provider } from "react-redux";
+import { ErrorBoundary } from "react-error-boundary";
+import { store } from "./store/store";
+import Dashboard from "./pages/dashboard";
+import { ConfigProvider } from "antd";
+import { useStyle } from "./hooks/theme/useStyle";
 
 function App() {
+  const { styles } = useStyle();
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: (
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
+        // <ProtectedRoute>
+        <Layout />
+        // </ProtectedRoute>
       ),
       children: [
         {
@@ -31,24 +36,14 @@ function App() {
         },
         {
           path: "/dashboard",
-          element: (
-            <Button
-              type="primary"
-              onClick={async () => {
-                await logout();
-                redirectToKeycloak();
-              }}
-            >
-              Logout
-            </Button>
-          ),
+          element: <Dashboard />,
         },
         {
           path: "/lola",
           element: (
-            <ProtectedRoute allowedRoles={["admin", "user"]}>
-              <div>Protected content</div>
-            </ProtectedRoute>
+            // <ProtectedRoute allowedRoles={["admin", "user"]}>
+            <div>Protected content</div>
+            // </ProtectedRoute>
           ),
         },
         {
@@ -65,14 +60,24 @@ function App() {
   ]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyles />
-      <StyleProvider>
-        <AuthProvider>
-          <RouterProvider router={router} />
-        </AuthProvider>
-      </StyleProvider>
-    </ThemeProvider>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyles />
+          <ConfigProvider
+            theme={{ token: antToken(theme), components: antComponent(theme) }}
+            button={{ className: styles.linearGradientButton }}
+            menu={{ className: styles.menu }}
+          >
+            <StyleProvider>
+              {/* <AuthProvider> */}
+              <RouterProvider router={router} />
+              {/* </AuthProvider> */}
+            </StyleProvider>
+          </ConfigProvider>
+        </ThemeProvider>
+      </Provider>
+    </ErrorBoundary>
   );
 }
 

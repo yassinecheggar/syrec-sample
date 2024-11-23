@@ -8,11 +8,11 @@ import React, {
 } from "react";
 import { isPublicUrl, redirectToKeycloak } from "@utils/helpers";
 import { AuthContextType, User, UserRole } from "@/types/auth/auth";
-import { getToken, logout, refreshToken } from "@/apis";
 import api from "@/utils/api";
+import { getToken, logout, refreshToken } from "@/services/apis/auth";
+import { InternalAxiosRequestConfig } from "axios";
 
 const redirectUri = import.meta.env.VITE_REACT_APP_REDIRECT_URI;
-type AxiosRequestConfig = Axios.AxiosXHRConfig<any>;
 
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined
@@ -42,7 +42,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   useLayoutEffect(() => {
     const authInterceptor = api.interceptors.request.use(function (
-      config: AxiosRequestConfig & { _retry?: boolean }
+      config: InternalAxiosRequestConfig & { _retry?: boolean }
     ) {
       if (config.url && isPublicUrl(config.url)) {
         return config;
